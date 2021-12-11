@@ -1,7 +1,8 @@
 #include <string>
+
 #include "FileInput.h"
 
-FileInput::FileInput(const char* fileName)
+FileInput::FileInput(const char *fileName)
 {
     file.open(fileName);
 }
@@ -42,4 +43,10 @@ char FileInput::nextChar()
 bool FileInput::hasNext()
 {
     return !file.eof();
+}
+
+void FileInput::GoToBeginning()
+{
+    file.clear();
+    file.seekg(0, std::ios::beg);
 }

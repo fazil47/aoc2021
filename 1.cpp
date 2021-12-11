@@ -1,25 +1,55 @@
 #include <iostream>
 #include <string>
+#include <vector>
+
 #include "FileInput.h"
+
+int accumulateSum(int start, int count, std::vector<int> &vec)
+{
+    int accumulatedSum = 0;
+    for (int i = start; i < start + count; i++)
+    {
+        accumulatedSum += vec[i];
+    }
+    return accumulatedSum;
+}
+
+void part1(std::vector<int> &vec)
+{
+    int count = 0;
+    for (int i = 1; i < vec.size(); ++i)
+    {
+        if (accumulateSum(i - 1, 1, vec) < accumulateSum(i, 1, vec))
+        {
+            count++;
+        }
+    }
+    std::cout << "Part 1: " << count << std::endl;
+}
+
+void part2(std::vector<int> &vec)
+{
+    int count = 0;
+    for (int i = 1; i < vec.size(); ++i)
+    {
+        if (accumulateSum(i - 1, 3, vec) < accumulateSum(i, 3, vec))
+        {
+            count++;
+        }
+    }
+    std::cout << "Part 2: " << count << std::endl;
+}
 
 int main()
 {
     FileInput f("1.txt");
-    int new_num, prev, count = 0;
-    new_num = f.nextInt();
-    prev = new_num;
+    std::vector<int> inputVec;
     while (f.hasNext())
     {
-        new_num = f.nextInt();
-        if (new_num == 0)
-            break;
-
-        if (new_num > prev)
-        {
-            count++;
-        }
-        prev = new_num;
+        inputVec.push_back(f.nextInt());
     }
-    std::cout << count << std::endl;
+    std::cout << "Day 1" << std::endl;
+    part1(inputVec);
+    part2(inputVec);
     return 0;
 }

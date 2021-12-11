@@ -14,4 +14,5 @@ public:
     std::string nextString();
     float nextFloat();
     bool hasNext();
+    void GoToBeginning();
 };
