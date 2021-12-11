@@ -120,7 +120,7 @@ void part2(std::vector<int> &inputDrawnNumbers,
 
 int main()
 {
-    FileInput f("4.txt");
+    FileInput f("inputs/4.txt");
     std::vector<int> inputDrawnNumbers;
     std::vector<array<array<int, 5>, 5>> inputBoards;
 

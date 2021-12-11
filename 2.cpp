@@ -67,7 +67,7 @@ void part2(FileInput &f)
 
 int main()
 {
-    FileInput f("2.txt");
+    FileInput f("inputs/2.txt");
     std::cout << "Day 2" << std::endl;
     part1(f);
     f.GoToBeginning();
