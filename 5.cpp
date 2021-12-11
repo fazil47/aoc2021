@@ -17,7 +17,7 @@ void Part2()
 
 int main()
 {
-    FileInput f("5.txt");
+    FileInput f("inputs/5.txt");
 
     std::cout << "Day 5" << std::endl;
     Part1();

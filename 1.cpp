@@ -42,7 +42,7 @@ void part2(std::vector<int> &vec)
 
 int main()
 {
-    FileInput f("1.txt");
+    FileInput f("inputs/1.txt");
     std::vector<int> inputVec;
     while (f.hasNext())
     {
