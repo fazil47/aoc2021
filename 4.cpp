@@ -9,7 +9,7 @@
 
 using std::array;
 
-// Marks a number on all the boards and returns the board that got a complete row or column first and the final number to be marked
+// Marks a number on all the boards
 std::tuple<int, int> MarkInBoard(const std::vector<array<array<int, 5>, 5>> &inputBoards, int number, std::vector<array<int, 5>> &markedInRows, std::vector<array<int, 5>> &markedInColumns, std::vector<int> &markedSums, std::vector<int> &completedBoards, bool returnFirstCompleteBoard = true)
 {
     std::tuple<int, int> returnNumberAndIndex;

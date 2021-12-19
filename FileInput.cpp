@@ -26,6 +26,13 @@ std::string FileInput::nextString()
     return value;
 }
 
+std::string FileInput::nextLine()
+{
+    std::string value;
+    std::getline(file, value);
+    return value;
+}
+
 float FileInput::nextFloat()
 {
     float value;

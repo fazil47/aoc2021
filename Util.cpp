@@ -14,6 +14,22 @@ std::vector<std::string> Util::Split(const std::string &s, char delimiter)
     return tokens;
 }
 
+std::vector<std::string> Util::Split(const std::string &s, std::string delimiter)
+{
+    std::vector<std::string> tokens = {s};
+    for (int i = 0; i < delimiter.length(); i++)
+    {
+        std::vector<std::string> newTokens;
+        for (std::string s : tokens)
+        {
+            std::vector<std::string> splitUpStrings = Split(s, delimiter[i]);
+            newTokens.insert(newTokens.end(), splitUpStrings.begin(), splitUpStrings.end());
+        }
+        tokens = newTokens;
+    }
+    return tokens;
+}
+
 std::vector<int> Util::Split(const std::string &s, char delimiter, int base)
 {
     std::vector<int> tokens;
