@@ -1,7 +1,8 @@
 #include <iostream>
-#include "FileInput.h"
 #include <vector>
 #include <math.h>
+
+#include "lib/FileInput.h"
 
 const int NUM_DIGITS = 12;
 

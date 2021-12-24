@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-#include "FileInput.h"
+#include "lib/FileInput.h"
 
 int accumulateSum(int start, int count, std::vector<int> &vec)
 {

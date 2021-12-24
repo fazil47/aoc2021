@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "FileInput.h"
+#include "lib/FileInput.h"
 
 bool isDepth(std::string direction)
 {

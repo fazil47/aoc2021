@@ -4,8 +4,8 @@
 #include <queue>
 #include <tuple>
 
-#include "FileInput.h"
-#include "Util.h"
+#include "lib/FileInput.h"
+#include "lib/Util.h"
 
 using std::array;
 

@@ -1,8 +1,8 @@
 #include <iostream>
 #include <array>
 
-#include "FileInput.h"
-#include "Util.h"
+#include "lib/FileInput.h"
+#include "lib/Util.h"
 
 using std::array;
 

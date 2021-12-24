@@ -9,8 +9,8 @@
 				"-fdiagnostics-color=always",
 				"-g",
 				"${file}",
-				"FileInput.cpp",
-				"Util.cpp",
+				"lib\\FileInput.cpp",
+				"lib\\Util.cpp",
 				"-o",
 				"${fileDirname}\\outputs\\${fileBasenameNoExtension}.exe"
 			],

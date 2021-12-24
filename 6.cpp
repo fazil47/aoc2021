@@ -2,8 +2,8 @@
 #include <vector>
 #include <array>
 
-#include "FileInput.h"
-#include "Util.h"
+#include "lib/FileInput.h"
+#include "lib/Util.h"
 
 // Grouping lantern fishes based on their internal timer
 class LanternFishGroups
