@@ -32,7 +32,7 @@ public:
         }
     }
 
-    long long int getPopulation() { return population; }
+    long long int GetGroupPopulation() { return population; }
 };
 
 class LanternFishs
@@ -65,18 +65,18 @@ public:
 
         for (int i = 0; i < 9; i++)
         {
-            if (fishes[i].getPopulation() > 0)
+            if (fishes[i].GetGroupPopulation() > 0)
             {
                 int newTimer = fishes[i].update();
 
                 if (newTimer == 8)
                 {
-                    newFishes[8].addFishes(fishes[i].getPopulation());
-                    newFishes[6].addFishes(fishes[i].getPopulation());
+                    newFishes[8].addFishes(fishes[i].GetGroupPopulation());
+                    newFishes[6].addFishes(fishes[i].GetGroupPopulation());
                 }
                 else if (newTimer == 6)
                 {
-                    newFishes[6].addFishes(fishes[i].getPopulation());
+                    newFishes[6].addFishes(fishes[i].GetGroupPopulation());
                 }
                 else if (newTimer != 6)
                 {
@@ -92,13 +92,13 @@ public:
         long long int population = 0;
         for (LanternFishGroups fishGroup : fishes)
         {
-            population = population + fishGroup.getPopulation();
+            population = population + fishGroup.GetGroupPopulation();
         }
         return population;
     }
 };
 
-long long int GetPolulation(LanternFishs fishes, int days)
+long long int GetPopulationAfterTime(LanternFishs fishes, int days)
 {
     for (int i = 0; i < days; i++)
     {
@@ -112,14 +112,14 @@ long long int GetPolulation(LanternFishs fishes, int days)
 void Part1(LanternFishs &fishes)
 {
     std::cout << "Part 1: "
-              << GetPolulation(fishes, 80) << std::endl;
+              << GetPopulationAfterTime(fishes, 80) << std::endl;
 }
 
 // 1733403626279
 void Part2(LanternFishs &fishes)
 {
     std::cout << "Part 2: "
-              << GetPolulation(fishes, 256) << std::endl;
+              << GetPopulationAfterTime(fishes, 256) << std::endl;
 }
 
 int main()

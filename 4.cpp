@@ -1,135 +1,118 @@
 #include <iostream>
 #include <vector>
 #include <array>
-#include <queue>
-#include <tuple>
+#include <algorithm>
 
 #include "lib/FileInput.h"
 #include "lib/Util.h"
 
 using std::array;
 
-// Marks a number on all the boards
-std::tuple<int, int> MarkInBoard(const std::vector<array<array<int, 5>, 5>> &inputBoards, int number, std::vector<array<int, 5>> &markedInRows, std::vector<array<int, 5>> &markedInColumns, std::vector<int> &markedSums, std::vector<int> &completedBoards, bool returnFirstCompleteBoard = true)
+class BingoBoard
 {
-    std::tuple<int, int> returnNumberAndIndex;
-    bool found = false;
+    array<array<int, 5>, 5> board;
+    array<int, 5> markedRows{0}, markedCols{0};
 
-    for (int i = 0; i < inputBoards.size(); i++)
+    int unmarkedSum, lastMarkedNum, numbersAttempted;
+    bool solved;
+
+public:
+    BingoBoard() : unmarkedSum(0), numbersAttempted(0), solved(false) {}
+
+    BingoBoard(array<array<int, 5>, 5> board) : BingoBoard()
     {
-        if (Util::In(completedBoards, i))
+        this->board = board;
+        for (array<int, 5> &row : board)
         {
-            continue;
-        }
-
-        for (int j = 0; j < 5; j++)
-        {
-            for (int k = 0; k < 5; k++)
+            for (int &num : row)
             {
-                if (inputBoards[i][j][k] == number)
-                {
-                    markedInRows[i][j]++;
-                    markedInColumns[i][k]++;
-                    markedSums[i] += inputBoards[i][j][k];
-
-                    if ((returnFirstCompleteBoard == false || found == false) && (markedInRows[i][j] == 5 || markedInColumns[i][k] == 5))
-                    {
-                        found = true;
-                        completedBoards.push_back(i);
-                        returnNumberAndIndex = std::tuple<int, int>(i, number);
-                    }
-                }
+                unmarkedSum += num;
             }
         }
     }
 
-    if (found)
-    {
-        return returnNumberAndIndex;
-    }
-    else
-    {
-        return std::tuple<int, int>(-1, -1);
-    }
-}
+    int GetNumbersAttemped() { return numbersAttempted; }
 
-void part1(std::vector<int> &inputDrawnNumbers,
-           std::vector<array<array<int, 5>, 5>> &inputBoards)
+    int GetResult()
+    {
+        if (solved)
+        {
+            return unmarkedSum * lastMarkedNum;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+
+    void MarkNumber(int number)
+    {
+        numbersAttempted++;
+
+        for (int i = 0; i < 5; i++)
+        {
+            for (int j = 0; j < 5; j++)
+            {
+                if (board[i][j] == number)
+                {
+                    unmarkedSum -= number;
+                    lastMarkedNum = number;
+                    markedRows[i]++;
+                    markedCols[j]++;
+                }
+            }
+        }
+
+        for (int i = 0; i < 5; i++)
+        {
+            if (markedRows[i] == 5 || markedCols[i] == 5)
+            {
+                solved = true;
+            }
+        }
+    }
+
+    bool SolveBoard(std::vector<int> &numbers)
+    {
+        for (int number : numbers)
+        {
+            MarkNumber(number);
+
+            if (solved)
+            {
+                break;
+            }
+        }
+
+        return solved;
+    }
+};
+
+// 65325
+void part1(std::vector<BingoBoard> &inputBoards)
 {
-    std::vector<array<int, 5>> markedInRows(inputBoards.size(), {0}), markedInColumns(inputBoards.size(), {0});
-    std::vector<int> markedSums(inputBoards.size(), 0), completedBoards;
-    int answer, completingNumber = -1, completedIndex = -1;
-
-    for (int number : inputDrawnNumbers)
-    {
-        int finalNumber, boardIndex;
-        std::tie(boardIndex, finalNumber) = MarkInBoard(inputBoards, number, markedInRows, markedInColumns, markedSums, completedBoards);
-        if (finalNumber != -1)
-        {
-            completingNumber = finalNumber;
-            completedIndex = boardIndex;
-            break;
-        }
-    }
-
-    int totalSum = 0;
-    for (int i = 0; i < 5; i++)
-    {
-        for (int j = 0; j < 5; j++)
-        {
-            totalSum += inputBoards[completedIndex][i][j];
-        }
-    }
-    answer = completingNumber * (totalSum - markedSums[completedIndex]);
-
     std::cout << "Part 1: "
-              << answer << std::endl;
+              << inputBoards[0].GetResult() << std::endl;
 }
 
-void part2(std::vector<int> &inputDrawnNumbers,
-           std::vector<array<array<int, 5>, 5>> &inputBoards)
+// 4624
+void part2(std::vector<BingoBoard> &inputBoards)
 {
-    std::vector<array<int, 5>> markedInRows(inputBoards.size(), {0}), markedInColumns(inputBoards.size(), {0});
-    std::vector<int> markedSums(inputBoards.size(), 0), completedBoards;
-    int answer, lastCompletedIndex = -1, lastCompletingNumber = -1;
-
-    for (int number : inputDrawnNumbers)
-    {
-        int finalNumber, boardIndex;
-        std::tie(boardIndex, finalNumber) = MarkInBoard(inputBoards, number, markedInRows, markedInColumns, markedSums, completedBoards, false);
-        if (finalNumber != -1)
-        {
-            lastCompletedIndex = boardIndex;
-            lastCompletingNumber = finalNumber;
-        }
-    }
-
-    int totalSum = 0;
-    for (int i = 0; i < 5; i++)
-    {
-        for (int j = 0; j < 5; j++)
-        {
-            totalSum += inputBoards[lastCompletedIndex][i][j];
-        }
-    }
-    answer = lastCompletingNumber * (totalSum - markedSums[lastCompletedIndex]);
-
     std::cout << "Part 2: "
-              << answer << std::endl;
+              << inputBoards[inputBoards.size() - 1].GetResult() << std::endl;
 }
 
 int main()
 {
     FileInput f("inputs/4.txt");
     std::vector<int> inputDrawnNumbers;
-    std::vector<array<array<int, 5>, 5>> inputBoards;
+    std::vector<BingoBoard> inputBoards;
 
-    std::string inputDrawnNumbersString = f.nextString();
-    inputDrawnNumbers = Util::Split(inputDrawnNumbersString, ',', 10);
+    inputDrawnNumbers = Util::Split(f.nextString(), ',', 10);
 
     while (f.hasNext())
     {
-        array<array<int, 5>, 5> board = {0};
+        array<array<int, 5>, 5> board;
         for (int i = 0; i < 5; i++)
         {
             for (int j = 0; j < 5; j++)
@@ -137,11 +120,25 @@ int main()
                 board[i][j] = f.nextInt();
             }
         }
-        inputBoards.push_back(board);
+
+        BingoBoard bingoBoard = BingoBoard(board);
+        bool solved = bingoBoard.SolveBoard(inputDrawnNumbers);
+
+        if (solved)
+        {
+            inputBoards.push_back(bingoBoard);
+        }
     }
 
+    std::sort(
+        inputBoards.begin(), inputBoards.end(),
+        [](BingoBoard &left, BingoBoard &right)
+        {
+            return left.GetNumbersAttemped() < right.GetNumbersAttemped();
+        });
+
     std::cout << "Day 4" << std::endl;
-    part1(inputDrawnNumbers, inputBoards);
-    part2(inputDrawnNumbers, inputBoards);
+    part1(inputBoards);
+    part2(inputBoards);
     return 0;
 }

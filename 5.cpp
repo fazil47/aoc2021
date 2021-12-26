@@ -37,13 +37,20 @@ void MarkLineSegInGrid(const array<array<int, 2>, 2> &lineSegment, std::vector<a
     }
 }
 
-void Part1(std::vector<array<array<int, 2>, 2>> lineSegments)
+int MarkLinesInGrid(const std::vector<array<array<int, 2>, 2>> &lineSegments, bool vertOrHorizOnly = false)
 {
     std::vector<array<int, 1000>> grid(1000, array<int, 1000>({0}));
 
     for (array<array<int, 2>, 2> lineSegment : lineSegments)
     {
-        if (IsVertOrHoriz(lineSegment))
+        if (vertOrHorizOnly)
+        {
+            if (IsVertOrHoriz(lineSegment))
+            {
+                MarkLineSegInGrid(lineSegment, grid);
+            }
+        }
+        else
         {
             MarkLineSegInGrid(lineSegment, grid);
         }
@@ -61,33 +68,22 @@ void Part1(std::vector<array<array<int, 2>, 2>> lineSegments)
         }
     }
 
-    std::cout << "Part 1: "
-              << count << std::endl;
+    return count;
 }
 
+// 5698
+void Part1(std::vector<array<array<int, 2>, 2>> lineSegments)
+{
+
+    std::cout << "Part 1: "
+              << MarkLinesInGrid(lineSegments, true) << std::endl;
+}
+
+// 15463
 void Part2(std::vector<array<array<int, 2>, 2>> lineSegments)
 {
-    std::vector<array<int, 1000>> grid(1000, array<int, 1000>({0}));
-
-    for (array<array<int, 2>, 2> lineSegment : lineSegments)
-    {
-        MarkLineSegInGrid(lineSegment, grid);
-    }
-
-    int count = 0;
-    for (int i = 0; i < 1000; i++)
-    {
-        for (int j = 0; j < 1000; j++)
-        {
-            if (grid[i][j] >= 2)
-            {
-                count++;
-            }
-        }
-    }
-
     std::cout << "Part 2: "
-              << count << std::endl;
+              << MarkLinesInGrid(lineSegments, false) << std::endl;
 }
 
 std::array<int, 2> StringToPoint(const std::string &str)

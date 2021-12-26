@@ -8,25 +8,7 @@
 
 int get_increasing_sum(int n)
 {
-    int sum = 0;
-    for (int i = 1; i <= n; i++)
-    {
-        sum += i;
-    }
-    return sum;
-}
-
-int get_reverse_increasing_sum(int sum)
-{
-    int i = 0;
-
-    while (sum > 0)
-    {
-        sum -= i;
-        i++;
-    }
-
-    return i - 1;
+    return n * (n + 1) / 2;
 }
 
 float get_mean(const std::vector<int> &v)
@@ -54,22 +36,6 @@ int get_median(const std::vector<int> &v)
     {
         return v[size / 2];
     }
-}
-
-float get_variance(const std::vector<int> &v)
-{
-    float mean = get_mean(v);
-    float ssum = 0;
-    for (int i = 0; i < v.size(); i++)
-    {
-        ssum += pow(v[i] - mean, 2);
-    }
-    return ssum / static_cast<float>(v.size());
-}
-
-float get_standard_deviation(const std::vector<int> &v)
-{
-    return sqrt(get_variance(v));
 }
 
 int get_fuel_cost(const std::vector<int> &distances, int destination, bool constant_fuel_rate = true)

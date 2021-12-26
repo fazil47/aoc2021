@@ -1,59 +1,15 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
+#include <array>
 
 #include "lib/FileInput.h"
 
-const int NUM_DIGITS = 12;
-
-void part1(FileInput &f)
+int findO2Rating(const std::vector<std::string> &input, int bit_position, const int bit_count[2], int num_digits)
 {
-    // First element of each sub-array is the number of 0s in a particular column and the second element is the number of 1s in a particular column
-    int bit_count[NUM_DIGITS][2] = {0};
-    int gamma = 0, epsilon = 0;
-    std::string s;
-
-    while (f.hasNext())
+    if (input.size() == 1 || bit_position == num_digits)
     {
-        s = f.nextString();
-        for (int i = 0; i < NUM_DIGITS; i++)
-        {
-            if (s[i] == '0')
-            {
-                bit_count[i][0]++;
-            }
-            else
-            {
-                bit_count[i][1]++;
-            }
-        }
-    }
-
-    for (int i = 0; i < NUM_DIGITS; i++)
-    {
-        int most_common = bit_count[i][0] > bit_count[i][1] ? 0 : 1;
-        gamma += most_common * pow(2, NUM_DIGITS - i - 1);
-        epsilon += abs(1 - most_common) * pow(2, NUM_DIGITS - i - 1);
-    }
-
-    std::cout << "Part 1: " << gamma * epsilon << std::endl;
-}
-
-int stringToDecimal(std::string s)
-{
-    int result = 0;
-    for (int i = 0; i < s.length(); i++)
-    {
-        result += (s[i] - '0') * pow(2, NUM_DIGITS - i - 1);
-    }
-    return result;
-}
-
-int findO2Rating(const std::vector<std::string> &input, int bit_position, const int bit_count[2])
-{
-    if (input.size() == 1 || bit_position == NUM_DIGITS)
-    {
-        return stringToDecimal(input[0]);
+        return std::stoi(input[0], nullptr, 2);
     }
 
     std::vector<std::string> new_input;
@@ -77,14 +33,14 @@ int findO2Rating(const std::vector<std::string> &input, int bit_position, const 
         }
     }
 
-    return findO2Rating(new_input, bit_position + 1, new_bit_count);
+    return findO2Rating(new_input, bit_position + 1, new_bit_count, num_digits);
 }
 
-int findCo2Rating(const std::vector<std::string> &input, int bit_position, const int bit_count[2])
+int findCo2Rating(const std::vector<std::string> &input, int bit_position, const int bit_count[2], int num_digits)
 {
-    if (input.size() == 1 || bit_position == NUM_DIGITS)
+    if (input.size() == 1 || bit_position == num_digits)
     {
-        return stringToDecimal(input[0]);
+        return stoi(input[0], nullptr, 2);
     }
 
     std::vector<std::string> new_input;
@@ -108,20 +64,56 @@ int findCo2Rating(const std::vector<std::string> &input, int bit_position, const
         }
     }
 
-    return findCo2Rating(new_input, bit_position + 1, new_bit_count);
+    return findCo2Rating(new_input, bit_position + 1, new_bit_count, num_digits);
 }
 
-void part2(FileInput &f)
+// 852500
+void part1(std::vector<std::string> input, const int num_digits)
+{
+    // First element of each sub-array is the number of 0s in a particular column and the second element is the number of 1s in a particular column
+    std::vector<std::array<int, 2>> bit_count(num_digits, std::array<int, 2>({0}));
+    int gamma = 0, epsilon = 0;
+
+    for (std::string s : input)
+    {
+        for (int i = 0; i < num_digits; i++)
+        {
+            if (s[i] == '0')
+            {
+                bit_count[i][0]++;
+            }
+            else
+            {
+                bit_count[i][1]++;
+            }
+        }
+    }
+
+    // The decimal value is found by bit shifting
+    for (int i = 0; i < num_digits; i++)
+    {
+        int most_common = bit_count[i][0] > bit_count[i][1] ? 0 : 1;
+        gamma += most_common;
+        gamma <<= 1;
+        epsilon += 1 - most_common;
+        epsilon <<= 1;
+    }
+    gamma >>= 1;
+    epsilon >>= 1;
+
+    std::cout << "Part 1: " << gamma * epsilon << std::endl;
+}
+
+// 1007985
+void part2(std::vector<std::string> input, const int num_digits)
 {
     int bit_count[2] = {0};
     int o2 = 0, co2 = 0;
     std::string s;
     std::vector<std::string> bin_nums;
 
-    while (f.hasNext())
+    for (std::string s : input)
     {
-        s = f.nextString();
-
         if (s[0] == '0')
         {
             bit_count[0]++;
@@ -134,8 +126,8 @@ void part2(FileInput &f)
         bin_nums.push_back(s);
     }
 
-    o2 = findO2Rating(bin_nums, 0, bit_count);
-    co2 = findCo2Rating(bin_nums, 0, bit_count);
+    o2 = findO2Rating(bin_nums, 0, bit_count, num_digits);
+    co2 = findCo2Rating(bin_nums, 0, bit_count, num_digits);
 
     std::cout << "Part 2: " << o2 * co2 << std::endl;
 }
@@ -143,9 +135,17 @@ void part2(FileInput &f)
 int main()
 {
     FileInput f("inputs/3.txt");
+
+    std::vector<std::string> input;
+    while (f.hasNext())
+    {
+        input.push_back(f.nextString());
+    }
+    const int num_digits = input[0].size();
+
     std::cout << "Day 3" << std::endl;
-    part1(f);
+    part1(input, num_digits);
     f.GoToBeginning();
-    part2(f);
+    part2(input, num_digits);
     return 0;
 }

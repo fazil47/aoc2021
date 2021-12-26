@@ -1,4 +1,5 @@
 #include <sstream>
+#include <algorithm>
 
 #include "Util.h"
 
@@ -53,4 +54,119 @@ bool Util::In(const std::vector<int> &v, int value)
     }
 
     return false;
+}
+
+bool Util::In(const std::string &s, char c)
+{
+    for (char i : s)
+    {
+        if (i == c)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// Returns a string containing all characters in a that are not in b
+std::string Util::StringDifference(const std::string &a, const std::string &b)
+{
+    std::string difference;
+    for (char aChar : a)
+    {
+        bool found = false;
+        for (char bChar : b)
+        {
+            if (aChar == bChar)
+            {
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+        {
+            difference += aChar;
+        }
+    }
+    return difference;
+}
+
+std::string Util::StringUnion(const std::string &a, const std::string &b)
+{
+    std::string combined = b;
+
+    for (char aChar : a)
+    {
+        bool found = false;
+        for (char bChar : b)
+        {
+            if (aChar == bChar)
+            {
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+        {
+            combined += aChar;
+        }
+    }
+
+    std::sort(combined.begin(), combined.end());
+
+    return combined;
+}
+
+std::string Util::StringIntersection(const std::string &a, const std::string &b)
+{
+    std::string intersection;
+
+    for (char aChar : a)
+    {
+        for (char bChar : b)
+        {
+            if (aChar == bChar)
+            {
+                intersection += aChar;
+            }
+        }
+    }
+    return intersection;
+}
+
+bool Util::IsSubString(const std::string &bigger, const std::string &smaller)
+{
+    if (bigger.length() < smaller.length())
+    {
+        return false;
+    }
+
+    for (int i = 0; i < bigger.length() - smaller.length() + 1; ++i)
+    {
+        if (bigger.substr(i, smaller.length()) == smaller)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Util::IsStringSubSet(const std::string &bigger, const std::string &smaller)
+{
+    if (bigger.length() < smaller.length())
+    {
+        return false;
+    }
+
+    for (char c : smaller)
+    {
+        if (!Util::In(bigger, c))
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
