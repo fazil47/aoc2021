@@ -7,6 +7,8 @@
 
 using std::array;
 
+// TODO: Use std::shared_ptr instead of raw pointers
+
 class Point
 {
 public:
